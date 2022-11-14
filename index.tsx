@@ -15,6 +15,7 @@ import {CountryItem, ItemTemplateProps, Style} from "./types/Types";
 import {useKeyboardStatus} from "./helpers/useKeyboardStatus";
 import {CountryButton} from "./components/CountryButton";
 import {countriesRemover} from "./helpers/countriesRemover";
+import { countriesIncluder } from './helpers/countriesIncluder';
 
 
 const height = Dimensions.get('window').height;
@@ -39,6 +40,7 @@ const height = Dimensions.get('window').height;
 
 interface Props {
     excludedCountries?: string[],
+    includedCountries?: string[],
 
     style?: Style,
 
@@ -71,9 +73,10 @@ export const CountryPicker = ({
                                   excludedCountries,
                                   initialState,
                                   itemTemplate: ItemTemplate = CountryButton,
+                                  includedCountries,
                                   ...rest
                               }: Props) => {
-    const codes = countriesRemover(excludedCountries);
+    const codes = includedCountries ? countriesIncluder(includedCountries) : countriesRemover(excludedCountries);
     const keyboardStatus = useKeyboardStatus();
     const animationDriver = React.useRef(new Animated.Value(0)).current;
     const animatedMargin = React.useRef(new Animated.Value(0)).current;
